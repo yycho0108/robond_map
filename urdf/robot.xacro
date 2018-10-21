@@ -1,0 +1,140 @@
+<?xml version='1.0'?>
+<robot name="robot" xmlns:xacro="http://ros.org/wiki/xacro">
+
+	<!-- body -->
+	<xacro:property name="br" value="0.25"/>
+	<xacro:property name="bh" value="0.1"/>
+
+	<!-- wheel -->
+	<xacro:property name="wr" value="0.05"/>
+	<xacro:property name="wd" value="0.3"/>
+	<xacro:property name="wt" value="0.01"/>
+
+	<!-- caster -->
+	<xacro:property name="cr" value="0.04"/>
+
+    <xacro:include filename="$(find robond_map)/urdf/common.xacro"/>
+    <xacro:include filename="$(find robond_map)/urdf/robot.gazebo"/>
+
+    <link name="base_link"></link>
+
+    <!-- base_footprint alias for ground plane projection -->
+    <link name="base_footprint"></link>
+    <joint name="base_footprint_joint" type="fixed">
+        <origin xyz="0 0 -${wr}" rpy="0 0 0"/>
+        <parent link="base_link"/>
+        <child link="base_footprint"/>
+    </joint>
+
+    <joint name="chassis_joint" type="fixed">
+		<origin xyz="0 0 0" rpy="0 0 0" />
+        <parent link="base_link"/>
+        <child link="chassis" />
+    </joint>
+
+    <link name='chassis'>
+        <inertial>
+            <mass value="15.0"/>
+			<origin xyz="0 0 ${wr}" rpy="0 0 0"/>
+			<cylinder_inertia m="15" r="${br}" h="${bh}"/>
+        </inertial>
+
+        <collision name='collision'>
+			<origin xyz="0 0 ${wr}" rpy="0 0 0"/> 
+            <geometry>
+				<cylinder length="${bh}" radius="${br}"/>
+            </geometry>
+        </collision>
+
+        <visual name='chassis_visual'>
+			<origin xyz="0 0 ${wr}" rpy="0 0 0"/>
+            <geometry>
+				<cylinder length="${bh}" radius="${br}"/>
+            </geometry>
+        </visual>
+
+        <collision name='back_caster_collision'>
+			<origin xyz="-0.15 0 ${-wr+cr}" rpy=" 0 0 0"/>
+            <geometry>
+				<sphere radius="${cr}"/>
+            </geometry>
+        </collision>
+
+        <visual name='back_caster_visual'>
+			<origin xyz="-0.15 0 ${-wr+cr}" rpy=" 0 0 0"/>
+            <geometry>
+				<sphere radius="${cr}"/>
+            </geometry>
+        </visual>
+
+        <collision name='front_caster_collision'>
+			<origin xyz="0.15 0 ${-wr+cr}" rpy=" 0 0 0"/>
+            <geometry>
+				<sphere radius="${cr}"/>
+            </geometry>
+        </collision>
+
+        <visual name='front_caster_visual'>
+			<origin xyz="0.15 0 ${-wr+cr}" rpy=" 0 0 0"/>
+            <geometry>
+				<sphere radius="${cr}"/>
+            </geometry>
+        </visual>
+    </link>
+
+	<xacro:wheel wheel_prefix="left" wheel_mass="5" wheel_radius="${wr}" wheel_thickness="${wt}" parent="chassis">
+		<origin xyz="0 ${wd/2} 0" rpy="${-pi/2} 0 0"/>
+    </xacro:wheel>
+	<xacro:wheel wheel_prefix="right" wheel_mass="5" wheel_radius="${wr}" wheel_thickness="${wt}" parent="chassis">
+		<origin xyz="0 ${-wd/2} 0" rpy="${-pi/2} 0 0"/>
+    </xacro:wheel>
+
+    <link name="camera">
+        <inertial>
+            <mass value="0.1"/>
+            <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6"/>
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.05 0.05 0.05"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.05 0.05 0.05"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="camera_joint" type="fixed">
+        <parent link="chassis"/>
+        <child link="camera"/>
+        <origin xyz="0.25 0 0.05" rpy="0 0 0"/>
+    </joint>
+
+    <link name="laser">
+        <inertial>
+            <mass value="0.1"/>
+            <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6"/>
+        </inertial>
+        <visual>
+            <geometry>
+                <mesh filename="package://robond_map/media/meshes/hokuyo.dae"/>
+            </geometry>
+        </visual>
+        <collision>
+            <geometry>
+                <box size="0.1 0.1 0.1"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="laser_joint" type="fixed">
+        <parent link="chassis"/>
+        <child link="laser"/>
+        <origin xyz="0.0 0 0.1" rpy="0 0 0"/>
+    </joint>
+
+</robot>

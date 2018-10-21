@@ -80,7 +80,7 @@
   <export>
     <!-- Other tools can request additional information be placed here -->
     <gazebo_ros gazebo_model_path="${prefix}/models"/>
-    <gazebo_ros gazebo_media_path="${prefix}"/>       
+    <gazebo_ros gazebo_media_path="${prefix}/media"/>       
     <!--<rviz rviz_model_path="${prefix}"/>-->
     <!--<rviz rviz_media_path="${prefix}/Media/materials/scripts:${prefix}/Media/materials/textures"/>-->
   </export>
