@@ -6,6 +6,7 @@
 	<arg name="rgb_topic"   default="/camera/rgb/image_raw"/>
 	<arg name="depth_topic" default="/camera/depth/image_raw"/>
 	<arg name="camera_info_topic" default="/camera/rgb/camera_info"/>  
+	<arg name="simulation" default="true" doc="whether the launching configuration is in the gazebo simulation; currently unused"/>
 
 	<!-- Mapping Node -->
 	<group ns="rtabmap">
