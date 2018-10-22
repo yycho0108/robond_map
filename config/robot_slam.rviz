@@ -108,19 +108,53 @@ Visualization Manager:
       Value: true
       Visual Enabled: true
     - Class: rviz/TF
-      Enabled: false
+      Enabled: true
       Frame Timeout: 15
       Frames:
         All Enabled: false
+        base_footprint:
+          Value: true
+        base_link:
+          Value: true
+        camera:
+          Value: true
+        camera_optical:
+          Value: true
+        chassis:
+          Value: true
+        laser:
+          Value: true
+        left_wheel_link:
+          Value: true
+        map:
+          Value: true
+        odom:
+          Value: true
+        right_wheel_link:
+          Value: true
       Marker Scale: 1
       Name: TF
       Show Arrows: true
       Show Axes: true
       Show Names: false
       Tree:
-        {}
+        map:
+          odom:
+            base_link:
+              base_footprint:
+                {}
+              chassis:
+                camera:
+                  camera_optical:
+                    {}
+                laser:
+                  {}
+                left_wheel_link:
+                  {}
+                right_wheel_link:
+                  {}
       Update Interval: 0
-      Value: false
+      Value: true
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
@@ -369,7 +403,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 12.6500978
+      Distance: 8.62068748
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1

@@ -38,7 +38,7 @@
 
 			<rosDebugLevel>na</rosDebugLevel>
 			<publishWheelTF>false</publishWheelTF>
-			<publishWheelJointState>false</publishWheelJointState>
+			<publishWheelJointState>true</publishWheelJointState>
 			<wheelAcceleration>1.8</wheelAcceleration>
 			<wheelTorque>100</wheelTorque>
 			<odometrySource>encoder</odometrySource>
@@ -84,7 +84,7 @@
 	<gazebo reference="laser">
 		<sensor type="ray" name="head_hokuyo_sensor">
 			<pose>0 0 0 0 0 0</pose>
-			<visualize>true</visualize>
+			<visualize>false</visualize>
 			<update_rate>40</update_rate>
 			<ray>
 				<scan>
