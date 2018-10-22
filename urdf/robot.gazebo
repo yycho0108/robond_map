@@ -30,7 +30,7 @@
 			<wheelSeparation>0.3</wheelSeparation>
 			<wheelDiameter>0.1</wheelDiameter>
 
-			<torque>100</torque>
+			<torque>1000</torque>
 			<commandTopic>cmd_vel</commandTopic>
 			<odometryTopic>odom</odometryTopic>
 			<odometryFrame>odom</odometryFrame>
@@ -40,7 +40,7 @@
 			<publishWheelTF>false</publishWheelTF>
 			<publishWheelJointState>true</publishWheelJointState>
 			<wheelAcceleration>1.8</wheelAcceleration>
-			<wheelTorque>100</wheelTorque>
+			<wheelTorque>1000</wheelTorque>
 			<odometrySource>encoder</odometrySource>
 		</plugin>
 	</gazebo>

@@ -13,7 +13,9 @@
     </include>
 	-->
 	<model name="ground_plane">
+		<!-- disable visual, for tiles -->
 		<static>true</static>
+		<pose>0 0 0 0 0 0</pose>
 		<link name="link">
 			<collision name="collision">
 				<geometry>
