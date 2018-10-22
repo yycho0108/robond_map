@@ -1,0 +1,45 @@
+<?xml version="1.0" ?>
+<sdf version="1.4">
+	<world name="default">
+		<!-- place user camera -->
+		<gui>
+			<camera name="user_camera">
+				<pose> 6.0 -18.0 10.0 0.000000 0.45 1.8</pose>
+			</camera>
+		</gui>
+		<!--
+	<include>
+	  <uri>model://ground_plane</uri>
+	</include>
+	-->
+	<model name="ground_plane">
+		<!-- disable visual, for tiles -->
+		<static>true</static>
+		<pose>0 0 0 0 0 0</pose>
+		<link name="link">
+			<collision name="collision">
+				<geometry>
+					<plane>
+						<normal>0 0 1</normal>
+						<size>100 100</size>
+					</plane>
+				</geometry>
+				<surface>
+					<friction>
+						<ode>
+							<mu>100</mu>
+							<mu2>50</mu2>
+						</ode>
+					</friction>
+				</surface>
+			</collision>
+		</link>
+	</model>
+	<include>
+		<uri>model://sun</uri>
+	</include>
+	<include>
+		<uri>model://olin_college</uri>
+	</include>
+</world>
+</sdf>
