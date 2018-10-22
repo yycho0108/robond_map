@@ -23,6 +23,11 @@ def roll_rospose(x):
     res = [x,y,rz]
     return res
 
+def rectify_pose(p0, p):
+    Ti = np.linalg.inv(pm.toMatrix(pm.fromMsg(p0)))
+    T = Ti.dot(pm.toMatrix(pm.fromMsg(p)))
+    return pm.toMsg(pm.fromMatrix(T))
+
 class LocEval(object):
     """ evaluate localization performance """
     def __init__(self):
@@ -35,22 +40,26 @@ class LocEval(object):
         self.slop_ = rospy.get_param('~slop', default=0.01)
         self.rate_ = rospy.get_param('~rate', default=50.0)
 
-        pf_sub = message_filters.Subscriber('/rtabmap/localization_pose', PoseWithCovarianceStamped)
+        self.p0_ = None
+
+        rt_sub = message_filters.Subscriber('/rtabmap/localization_pose', PoseWithCovarianceStamped)
         gt_sub = message_filters.Subscriber('/ground_truth_pose', Odometry)
         self.sub_ = message_filters.ApproximateTimeSynchronizer(
-                [pf_sub, gt_sub], 10, self.slop_, allow_headerless=False)
+                [rt_sub, gt_sub], 10, self.slop_, allow_headerless=False)
         self.sub_.registerCallback(self.data_cb)
 
         self.err_ = []
 
         self.last_recv = rospy.Time.now()
 
-    def data_cb(self, gt, pf):
+    def data_cb(self, gt, rt):
         self.last_recv=gt.header.stamp
         t = gt.header.stamp.to_sec()
-        gt_pose = roll_rospose(gt.pose.pose)
-        pf_pose = roll_rospose(pf.pose.pose)
-        dx,dy,dh = np.subtract(gt_pose, pf_pose)
+        if self.p0_ is None:
+            self.p0_ = (gt.pose.pose, rt.pose.pose)
+        gt_pose = roll_rospose(rectify_pose(self.p0_[0], gt.pose.pose))
+        rt_pose = roll_rospose(rectify_pose(self.p0_[1], rt.pose.pose))
+        dx,dy,dh = np.subtract(gt_pose, rt_pose)
         dh = anorm(dh) # normalize angle
         err = [t, dx,dy,dh]
 
@@ -88,11 +97,11 @@ class LocEval(object):
         d_pos = np.linalg.norm(data[:,1:3], axis=-1)
         d_rot = np.rad2deg(np.abs(data[:,-1]))
         fig, ax = plt.subplots(2,1, sharex=True)
-        ax[0].plot(stamp, d_pos)
+        ax[0].plot(stamp, d_pos, '+--')
         ax[0].set_ylabel('Pos Error(m)')
         ax[0].grid()
-        ax[0].set_title('Udacity Bot Localization Error Characterization')
-        ax[1].plot(stamp, d_rot)
+        ax[0].set_title('RTABMAP Localization Error Characterization')
+        ax[1].plot(stamp, d_rot, '+--')
         ax[1].set_ylabel('Rot Error(deg)')
         ax[1].grid()
         ax[1].set_xlabel('Time (sec)')
